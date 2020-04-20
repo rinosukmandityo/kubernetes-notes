@@ -1,0 +1,22 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast # storage class name
+provisioner: kubernetes.io/gce-pd # determine the volume plugin, for example gce-pd for GCP, for EBS we can use aws-ebs
+parameters:
+  type: pd-ssd # type the disk you are requesting in application type. 
+  # For ssd pd-ssd for regular/standard disk use pd-standard, by default pd-standard. And pd is Persistent Disk, for GCP
+
+# =========== FLOW ==========
+### Storage Class --> Persistent Volume Claim --> Referencing claim in Pod --> Test use case
+
+### storage class typically created by Administrator and this is one time configuration
+### with the help of Default Storage Class configured, developer doesn't have to worry whether suitable PV is available in storage pool or not
+
+# =========== RUN ==========
+# $ kubectl create -f storage-class.yaml
+### to validate
+# $ kubectl get storageclass
+### to get more detail about this storage class
+# $ kubectl describe storageclass fast
+### look at the Status is Bound and Volume will be matched with disk name on GCP

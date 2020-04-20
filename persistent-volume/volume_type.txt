@@ -1,0 +1,33 @@
+Cloud Based Volume:
+- awsElasticBlockStore
+- azureDisk
+- azureFile
+- gcePersistentDisk
+
+Host Based Volume:
+- emptyDir
+- hostPath
+
+Network Based Volume:
+- nfs
+- iscsi
+- glusterfs
+
+Others:
+- cephfs
+- configMap
+- csi
+- downwardAPI
+- vsphereVolume
+- fc
+- flocker
+- gitRepo
+- local
+- storageos
+- persistentVolumeClaim
+- projected
+- portworxVolume
+- quobyte
+- rbd
+- scaleIO
+- secret

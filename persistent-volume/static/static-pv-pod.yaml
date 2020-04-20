@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-pv-pod
+spec:
+  containers:
+    - name: test-static-pv-container
+      image: nginx
+      volumeMounts:
+        - mounthPath: /test-pd
+          name: test-volume
+  volumes:
+    - name: test-volume
+      persistentVolumeClaim:
+        claimName: my-disk-claim-static # it should be matched with PVC metadata name
+
+# =========== RUN ==========
+
+### run this file using kubectl command
+# $ kubectl create -f static-pv-pod.yaml
+
+### to validate
+# $ kubectl get pod -o wide
+### check the status 'Running' or not
+### also check the GCP disk on console or AWS console, the disk should be used by pod Node
+
+
+# ========= TEST CASE =========
+
+# $ kubectl exec static-pv-pod -it /bin/sh
+### check the disk inside the pod (mounthPath)
+# df -h /test-pd
+# create test file
+# cd /test-pd
+# echo "From first pod" > test1.txt
+# exit
+
+### delete the pod
+# $ kubectl delete -f static-pv-pod.yaml
+
+### re-create the pod
+# $ kubectl create -f static-pv-pod.yaml
+
+### run exec command
+# kubectl exec static-pv-pod df /test-pd
+# kubectl exec static-pv-pod ls /test-pd/
+# kubectl exec static-pv-pod cat /test-pd/test1.txt
+
+
+# ========= CLEAN UP =========
+
+# kubectl delete -f static-pv-pod.yaml
+# kubectl delete -f static-pvc.yaml
+# kubectl delete -f static-pv.yaml

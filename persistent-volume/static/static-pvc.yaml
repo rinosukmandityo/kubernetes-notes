@@ -1,0 +1,23 @@
+apiVersion: v1 # PVC part of initial stable release so it use v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-disk-claim-static # it will be shown if we run kubectl get pvc command
+spec: # PVC is for requesting for the resources, typically by developer
+  resources:
+    requests:
+      storage: 5Gi
+  accessMode:
+    - ReadWriteOnce # that means, it can be mounted as read write by a single node and the other access modes are ReadWriteMany & ReadOnlyMany
+  storageClassName: slow # because it is static, this class has to be declared and matched with available PV
+
+
+# =========== RUN ==========
+
+### run this file using kubectl command
+# $ kubectl create -f static-pvc.yaml
+
+### to validate
+# $ kubectl get pvc
+### check the status 'Bound' or not,, if Bound so it's bounded to PV correctly
+### also check the PV status, PV status should 'Bound' and Claim is 'default/my-disk-claim-static'
+# $ kubectl get pv

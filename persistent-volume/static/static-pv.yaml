@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-gce # it will be shown if we run kubectl get pv command
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce # that means, it can be mounted as read write by a single node and the other access modes are ReadWriteMany & ReadOnlyMany
+  storageClassName: slow # it could be slow, fast, distributed, etc
+  gcePersistentDisk: # backend persistent disk, it can be awsElasticBlockStore, azureDisk, glusterfs or anything else
+    pdName: my-data-disk # disk name we are created on Google Cloud Provider (GCP), make sure we create this first to prevent error
+    fsType: ext4 # we will get raw disk and you need to format it with some kind of a file system type, like ext4, etc
+
+
+# =========== RUN ==========
+
+### run this file using kubectl command
+# $ kubectl create -f static-pv.yaml
+
+### to validate
+# $ kubectl get pv

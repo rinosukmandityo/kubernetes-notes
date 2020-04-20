@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+	name: test-pod
+spec:
+	containers:
+		- name: test-container
+			image: k8s.gcr.io/busybox
+			command: [ "/bin/sh", "-c", "env" ]
+			env:
+				- name: SPECIAL_LEVEL_KEY # environment variable name inside pods / container
+					valueFrom:
+						configMapKeyRef:
+							name: special-config # config maps name
+							key: special.how # config maps key
+	restart-policy: Never
+	
+# ============ How to create this config maps ===========
+# create the config maps
+# $ kubectl create configmap special-config --from-literal=special.how=very
+
+# to check the config maps
+# $ kubectl get configmaps
+
+# to validate this use this command
+# $ kubectl logs test-pod | grep SPECIAL
+# > CONFIG GET maxmemory
+# > CONFIG GET maxmemory-policy

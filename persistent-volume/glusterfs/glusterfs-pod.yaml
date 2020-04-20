@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  name: glusterfs-replicaset
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gluster-container
+  template:
+    metadata:
+      labels:
+        app: gluster-container
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          volumeMounts: 
+            - name: myvol
+              mounthPath: /mnt
+            args:
+              - sleep
+              - "360"
+      volumes:
+        - name: myvol
+          persistentVolumeClaim:
+            claimName: gluster-volume
+      terminationGracePeriodSeconds: 0

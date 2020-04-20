@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+	name: redis
+spec:
+	containers:
+		- name: redis
+		  image: kubernetes/redis:v1
+      volumeMounts:
+        - name: config
+          mounthPath: /redis-master # path inside container / pod
+	volumes:
+		- name: config
+		  configMap:
+		  	name: example-redis-config # config maps name of redis config
+		  	items:
+		  		- key: redis-config # original file name before put it into config maps
+		  		  path: redis.conf # config name inside container / pod
+
+# ============ How to create this config maps ===========
+# download file using curl
+# $ curl -OL https://k8s.io/examples/pods/config/redis-config
+
+# then create the config maps
+# $ kubectl create configmap example-redis-config --from-file=redis-config
+
+# to check whether /redis-master/redis.conf is setting up properly or not
+# $ kubectl exec redis cat /redis-master/redis-conf
+
+# or try to go inside redis-cli
+# $ kubectl exec -it redis redis-cli
+# > CONFIG GET maxmemory
+# > CONFIG GET maxmemory-policy

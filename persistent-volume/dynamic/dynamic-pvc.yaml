@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+	name: my-disk-claim-dynamic
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  accessMode: 
+    - ReadWriteOnce
+  storageClassName: fast # if we don't mention the storage class name then kubernetes will provision storage from the default standard class
+
+  # =========== RUN ==========
+  # $ kubectl create -f dynamic-pvc.yaml
+  ### to validate
+  # $ kubectl get pvc
